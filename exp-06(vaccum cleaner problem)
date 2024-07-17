@@ -1,0 +1,33 @@
+def vacuum_cleaner_problem(room):
+    n = len(room)
+    m = len(room[0])
+    moves = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    
+    def print_room():
+        for row in room:
+            print(' '.join(str(x) for x in row))
+        print()
+    
+    def dfs(x, y):
+        if room[x][y] == 1:
+            room[x][y] = 0
+            print(f"Cleaning position: ({x}, {y})")
+            print_room()
+        for dx, dy in moves:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < n and 0 <= ny < m and room[nx][ny] == 1:
+                dfs(nx, ny)
+    
+    for i in range(n):
+        for j in range(m):
+            if room[i][j] == 1:
+                dfs(i, j)
+
+room = [
+    [1, 0, 0, 1],
+    [1, 1, 0, 0],
+    [0, 1, 1, 0],
+    [0, 0, 1, 1]
+]
+
+vacuum_cleaner_problem(room)
