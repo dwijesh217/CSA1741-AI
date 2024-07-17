@@ -1,0 +1,27 @@
+from itertools import permutations
+def travelling_salesman(graph, start):
+    vertices = list(range(len(graph)))
+    vertices.remove(start)
+    min_path = float('inf')
+    best_route = []
+    for perm in permutations(vertices):
+        current_weight = 0
+        k = start
+        for j in perm:
+            current_weight += graph[k][j]
+            k = j
+        current_weight += graph[k][start]
+        if current_weight < min_path:
+            min_path = current_weight
+            best_route = perm
+    return min_path, [start] + list(best_route) + [start]
+graph = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+start_vertex = 0
+min_path, best_route = travelling_salesman(graph, start_vertex)
+print("Minimum path cost:", min_path)
+print("Best route:", best_route)
