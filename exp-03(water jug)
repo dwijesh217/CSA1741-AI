@@ -1,0 +1,20 @@
+def water_jug_problem(capacity, goal):
+    visited = set()
+    stack = [(0, 0)]
+    while stack:
+        (a, b) = stack.pop()
+        if (a, b) in visited:
+  continue
+        visited.add((a, b))
+        if a == goal or b == goal:
+            return True
+        stack.append((capacity[0], b))
+        stack.append((a, capacity[1]))
+        stack.append((0, b))
+        stack.append((a, 0))
+        stack.append((min(a + b, capacity[0]), b - (min(a + b, capacity[0]) - a)))
+        stack.append((a - (min(a + b, capacity[1]) - b), min(a + b, capacity[1])))
+    return False
+capacity = (4, 3)
+goal = 2
+print(water_jug_problem(capacity, goal))
