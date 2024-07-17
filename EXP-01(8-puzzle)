@@ -1,0 +1,57 @@
+import heapq
+import itertools
+goal state = tuple(range(9))  # (0, 1, 2, 3, 4, 5, 6, 7, 8)
+moves = {
+    0: [1, 3],
+    1: [0, 2, 4],
+    2: [1, 5],
+    3: [0, 4, 6],
+    4: [1, 3, 5, 7],
+    5: [2, 4, 8],
+    6: [3, 7],
+    7: [4, 6, 8],
+    8: [5, 7]
+}
+def h(state):
+    return sum(abs(b % 3 - g % 3) + abs(b // 3 - g // 3) for b, g in ((state.index(i), goal_state.index(i)) for i in range(1, 9)))
+def astar(start):
+    count = itertools.count()
+    open_list = [(h(start), next(count), start)]
+    heapq.heapify(open_list)
+    closed_list = set()
+    g_scores = {start: 0}
+    came_from = {start: None}
+    while open_list:
+        f, _, current = heapq.heappop(open_list)
+        if current == goal_state:
+            path = []
+            while current:
+                path.append(current)
+                current = came_from[current]
+            return path[::-1]
+        closed_list.add(current)
+ for i, move in enumerate(moves[current.index(0)]):
+            next_state = list(current)
+            next_state[current.index(0)], next_state[move] = next_state[move], 0
+            next_state = tuple(next_state)
+            if next_state in closed_list:
+                continue
+            tentative_g_score = g_scores[current] + 1
+            if next_state not in g_scores or tentative_g_score < g_scores[next_state]:
+                came_from[next_state] = current
+                g_scores[next_state] = tentative_g_score
+                f_score = tentative_g_score + h(next_state)
+                heapq.heappush(open_list, (f_score, next(count), next_state))
+    return None
+initial_state = (1, 2, 3, 0, 4, 6, 7, 5, 8)  # Initial board configuration
+solution = astar(initial_state)
+if solution:
+    print(f'Solution found in {len(solution)-1} steps:')
+    for i, state in enumerate(solution):
+        print(f'Step {i}:')
+        print(f'{state[0]} {state[1]} {state[2]}')
+        print(f'{state[3]} {state[4]} {state[5]}')
+        print(f'{state[6]} {state[7]} {state[8]}')
+        print()
+else:
+    print('No solution found.')
